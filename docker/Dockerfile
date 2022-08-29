@@ -22,7 +22,6 @@ RUN apt-get install -y ros-$ROS2_DISTRO-filters
 RUN bash -c 'source /ros_entrypoint.sh && colcon build' || true
 RUN bash -c 'source /ros_entrypoint.sh && colcon build --packages-select wheeltec_rrt_msg' || true
 RUN bash -c 'source /ros_entrypoint.sh && source install/setup.bash && colcon build --packages-select wheeltec_robot_rrt' || true
-# fine, let's manually set the ROS1 version for now
 RUN apt-get install -y ros-$ROS1_DISTRO-libuvc-ros
 RUN bash -c 'source /ros_entrypoint.sh && source install/setup.bash && colcon build --packages-skip nav2_system_tests'
 
