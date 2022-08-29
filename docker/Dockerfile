@@ -26,3 +26,14 @@ RUN apt-get install -y ros-$ROS1_DISTRO-libuvc-ros
 RUN bash -c 'source /ros_entrypoint.sh && source install/setup.bash && colcon build --packages-skip nav2_system_tests'
 
 COPY camera_info /root/.ros/
+
+# install required packages
+RUN apt-get install -y ros-$ROS2_DISTRO-joint-state-publisher ros-$ROS2_DISTRO-robot-localization ros-$ROS2_DISTRO-rtabmap-ros
+
+WORKDIR /work/ros1_ws
+COPY wheeltec-ros1-src/src src
+RUN DEBIAN_FRONTEND=noninteractive bash -c 'source /opt/ros/$ROS1_DISTRO/setup.bash && rosdep install --from-paths src -r -y'
+RUN bash -c 'source /opt/ros/$ROS1_DISTRO/setup.bash && catkin_make'
+RUN apt-get install -y ros-$ROS1_DISTRO-rgbd-launch
+
+WORKDIR /work

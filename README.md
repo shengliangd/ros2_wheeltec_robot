@@ -2,7 +2,8 @@
 
 使用方法：
 
-1. 下载该公司提供的 wheeltec-ros2-src.zip、LSM10.rar，分别解压到 wheeltec-ros2-src、LSM10 这两个文件夹下；
+1. 下载该公司提供的 wheeltec-ros1-src.zip、wheeltec-ros2-src.zip、LSM10.rar，分别解压到 wheeltec-ros1-src、wheeltec-ros2-src、LSM10 这三个文件夹下；
+2. 注释掉 LSM10 文件夹下两个 CMakeLists.txt 里包含 dynamic_reconfigure 的行；
 2. 如果需要的话，替换 camera_info 中的文件；
 3. 执行 `docker build . -t ros2_wheeltec_robot -f docker/Dockerfile`。
 
