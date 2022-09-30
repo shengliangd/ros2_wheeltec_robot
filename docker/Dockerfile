@@ -1,4 +1,4 @@
-FROM ros:galactic-ros1-bridge
+FROM ros:galactic
 
 RUN apt-get update
 
@@ -12,10 +12,9 @@ RUN DEBIAN_FRONTEND=noninteractive bash -c 'source /ros_entrypoint.sh && rosdep 
 
 # LSM10
 COPY LSM10 /tmp/LSM10
-# TODO: comment dynamic_reconfigure
-RUN cp /tmp/LSM10/1-CMakeLists.txt src/wheeltec_lidar_ros2/LSlidar/lsm10_v2/CMakeLists.txt
+COPY LSM10/1-CMakeLists.txt src/wheeltec_lidar_ros2/LSlidar/lsm10_v2/CMakeLists.txt
 RUN bash -c 'source /ros_entrypoint.sh && colcon build --packages-select lsm10_v2'
-RUN cp /tmp/LSM10/2-CMakeLists.txt src/wheeltec_lidar_ros2/LSlidar/lsm10_v2/CMakeLists.txt
+COPY LSM10/2-CMakeLists.txt src/wheeltec_lidar_ros2/LSlidar/lsm10_v2/CMakeLists.txt
 RUN bash -c 'source /ros_entrypoint.sh && colcon build --packages-select lsm10_v2'
 
 # build!
@@ -38,6 +37,8 @@ RUN bash -c 'source /ros_entrypoint.sh && source install/setup.bash && colcon bu
 # RUN DEBIAN_FRONTEND=noninteractive bash -c 'source /opt/ros/$ROS1_DISTRO/setup.bash && rosdep install --from-paths src -r -y'
 # RUN bash -c 'source /opt/ros/$ROS1_DISTRO/setup.bash && catkin_make'
 # RUN apt-get install -y ros-$ROS1_DISTRO-rgbd-launch
+
+ENV LD_LIBRARY_PATH="/work/ros2_ws/src/ros2_astra_camera-main/ros2_astra_camera/lib/openni2_redist/arm64:${LD_LIBRARY_PATH}"
 
 COPY camera_info /root/.ros/camera_info
 
