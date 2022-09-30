@@ -64,7 +64,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(os.path.join(nav2_dir, 'launch', 'navigation_launch.py')),
     )
 
-    amcl_config = Path(get_package_share_directory('wheeltec_nav2'), 'param', 'param_mini_akm.yaml')
+    amcl_config = Path(get_package_share_directory('wheeltec_nav2'), 'param', 'param_mini_mec.yaml')
 
     parameters={
           'frame_id':'base_footprint',
