@@ -90,9 +90,9 @@ def generate_launch_description():
           ('rgb/image', 'camera/color/image_raw'), 
           ('rgb/camera_info', 'camera/color/camera_info'),
           ('depth/image', 'camera/depth/image')]
-    robot_id = os.environ['ROBOT_ID']
+    # robot_id = os.environ['ROBOT_ID']
     return LaunchDescription([
-        PushRosNamespace(f'{robot_id}'),
+        # PushRosNamespace(f'{robot_id}'),
         wheeltec_robot,rplidar_ros,depth_img,
         # Launch arguments
         SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1'),
