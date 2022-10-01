@@ -64,7 +64,14 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(os.path.join(nav2_dir, 'launch', 'navigation_launch.py')),
     )
 
-    amcl_config = Path(get_package_share_directory('wheeltec_nav2'), 'param', 'param_mini_mec.yaml')
+    amcl_config = Path(get_package_share_directory('wheeltec_nav2'), 'param', 'wheeltec_param', 'param_mini_mec.yaml')
+
+    use_astrapro = LaunchConfiguration('use_astrapro', default='false')
+    astra_dir = get_package_share_directory('ros2_astra_camera')
+    depth_img = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(astra_dir,'launch', 'astra_pro_launch.py')),
+            condition=IfCondition(use_astrapro),
+            )
 
     parameters={
           'frame_id':'base_footprint',
@@ -86,7 +93,7 @@ def generate_launch_description():
     robot_id = os.environ['ROBOT_ID']
     return LaunchDescription([
         PushRosNamespace(f'{robot_id}'),
-        wheeltec_robot,rplidar_ros,
+        wheeltec_robot,rplidar_ros,depth_img,
         # Launch arguments
         SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1'),
 
