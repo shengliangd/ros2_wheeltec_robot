@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ros2-wheeltec
+spec:
+  selector:
+    matchLabels:
+      app: ros2_wheeltec
+  template:
+    metadata:
+      labels:
+        app: ros2_wheeltec
+    spec:
+      containers:
+      - name: ros2-wheeltec
+        image: docker.io/library/ros2_wheeltec_robot:latest
+        command: ["bash", "-c", "source ros2_ws/install/setup.bash && LD_LIBRARY_PATH=/work/ros2_ws/src/ros2_astra_camera-main/ros2_astra_camera/lib/openni2_redist/arm64:$LD_LIBRARY_PATH && ros2 launch wheeltec_robot_rtab wheeltec_slam_rtab.launch.py use_astrapro:=true"]
+        imagePullPolicy: Never
+        env:
+        - name: CYCLONEDDS_URI
+          value: "<CycloneDDS><Domain><General><NetworkInterfaceAddress>eth0</NetworkInterfaceAddress></General></Domain></CycloneDDS>"
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - mountPath: /dev
+            name: dev
+      nodeName: robot3
+      hostNetwork: true
+      volumes:
+      - name: dev
+        hostPath:
+          path: /dev
