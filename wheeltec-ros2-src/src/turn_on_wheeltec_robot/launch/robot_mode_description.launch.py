@@ -101,7 +101,7 @@ def generate_launch_description():
             package='tf2_ros', 
             executable='static_transform_publisher', 
             name='base_to_camera',
-            arguments=['0.195', '0', '0.25','3.14', '0','0','base_footprint','camera_link'],),
+            arguments=['0.195', '0', '0.25','0', '0','0','base_footprint','camera_link'],),
     ])
 
     senior_mec_bs = GroupAction([
