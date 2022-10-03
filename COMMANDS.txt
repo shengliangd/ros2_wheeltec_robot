@@ -51,6 +51,8 @@ ros2 launch wheeltec_slam_toolbox online_sync.launch.py
 ③使用cartographer建图
 ros2 launch wheeltec_cartographer cartographer.launch.py
 
+ros2 launch wheeltec_nav2 save_map.launch.py
+
 7、2D导航
 ros2 launch wheeltec_nav2 wheeltec_nav2.launch.py
 
