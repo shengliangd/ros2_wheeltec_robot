@@ -1,0 +1,15 @@
+/**:
+  ros__parameters:
+    vendor: "0x2bc5"
+    product: "0x0501"
+    serial: ""
+    index: 0
+    width: 640
+    height: 480
+    video_mode: uncompressed
+    frame_rate: 30.0
+    timestamp_method: start
+    frame_id: camera
+    camera_info_url: ""
+    scanning_mode: 0
+    auto_exposure: 3
