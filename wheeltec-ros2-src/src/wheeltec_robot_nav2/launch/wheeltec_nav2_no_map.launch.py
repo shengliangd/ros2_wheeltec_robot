@@ -34,8 +34,6 @@ def generate_launch_description():
 
 
     # Create the launch configuration variables
-    namespace = LaunchConfiguration('namespace')
-    use_namespace = LaunchConfiguration('use_namespace')
     map_yaml_file = LaunchConfiguration('map')
     use_sim_time = LaunchConfiguration('use_sim_time')
     use_slam = LaunchConfiguration('use_slam', default='false')
@@ -45,16 +43,6 @@ def generate_launch_description():
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
-
-    declare_namespace_cmd = DeclareLaunchArgument(
-        'namespace',
-        default_value='',
-        description='Top-level namespace')
-
-    declare_use_namespace_cmd = DeclareLaunchArgument(
-        'use_namespace',
-        default_value='false',
-        description='Whether to apply a namespace to the navigation stack')
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         'map',
@@ -92,11 +80,10 @@ def generate_launch_description():
     lidar_ros = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(wheeltec_launch_dir, 'wheeltec_lidar.launch.py')),
     )
+    namespace = f'/robots/{os.environ["ROBOT_NAME"]}'
     # Specify the actions
     bringup_cmd_group = GroupAction([
-        PushRosNamespace(
-            condition=IfCondition(use_namespace),
-            namespace=namespace),
+        PushRosNamespace(namespace=namespace),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'slam_launch.py')),
@@ -143,9 +130,6 @@ def generate_launch_description():
     # Declare the launch options
     # ld.add_action(wheeltec_robot)
     # ld.add_action(lidar_ros)
-        
-    ld.add_action(declare_namespace_cmd)
-    ld.add_action(declare_use_namespace_cmd)
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_slam_cmd)
