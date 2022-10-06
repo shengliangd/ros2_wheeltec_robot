@@ -7,7 +7,7 @@ from launch.actions import IncludeLaunchDescription, GroupAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch import LaunchDescription
 from ament_index_python import get_package_share_directory
-from launch_ros.actions import Node, PushRosNamespace
+from launch_ros.actions import Node, PushRosNamespace, SetRemap
 from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition
 
@@ -51,6 +51,8 @@ def generate_launch_description():
     return LaunchDescription([
         GroupAction([
                 PushRosNamespace(namespace=namespace),
+                SetRemap(src='/tf',dst='tf'),
+                SetRemap(src='/tf_static',dst='tf_static'),
 
                 wheeltec_robot,rplidar_ros,depth_img,
                 # Set env var to print messages to stdout immediately
