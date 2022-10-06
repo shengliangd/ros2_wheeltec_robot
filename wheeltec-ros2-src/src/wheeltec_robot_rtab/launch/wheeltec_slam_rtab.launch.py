@@ -47,6 +47,10 @@ def generate_launch_description():
           ('rgb/image', 'camera/color/image_raw'), 
           ('rgb/camera_info', 'camera/color/camera_info'),
           ('depth/image', 'camera/depth/image')]
+    remappings += [('map', '/map'),
+        ('mapData', '/mapData'),
+        ('cloud_map', '/cloud_map'),
+        ('grid_map', '/grid_map')]
     namespace = f'/robots/{os.environ["ROBOT_NAME"]}'
     return LaunchDescription([
         GroupAction([
