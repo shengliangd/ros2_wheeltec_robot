@@ -54,6 +54,8 @@ def generate_launch_description():
                 SetRemap(src='/tf',dst='tf'),
                 SetRemap(src='/tf_static',dst='tf_static'),
 
+                SetRemap(src='map',dst='/shared/map'),
+
                 wheeltec_robot,rplidar_ros,depth_img,
                 # Set env var to print messages to stdout immediately
                 SetEnvironmentVariable('RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED', '1'),
