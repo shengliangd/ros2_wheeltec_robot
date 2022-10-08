@@ -83,10 +83,6 @@ def generate_launch_description():
     namespace = f'/robots/{os.environ["ROBOT_NAME"]}'
     # Specify the actions
     bringup_cmd_group = GroupAction([
-        PushRosNamespace(namespace=namespace),
-        # FIXME: doesn't work if use relative path 'map' as src
-        SetRemap(src='/robots/robot3/map', dst='/shared/map'),
-
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'slam_launch.py')),
             condition=IfCondition(use_slam),
@@ -126,11 +122,24 @@ def generate_launch_description():
     # Create the launch description and populate
     ld = LaunchDescription()
 
+    # FIXME: doesn't work if use relative path as src
+    for action in [
+            PushRosNamespace(namespace=namespace),
+            SetRemap(src=f'{namespace}/map', dst='/shared/map'),
+
+            SetRemap(src='/odom_combined', dst=f'{namespace}/odom_combined'),
+            SetRemap(src='/scan', dst=f'{namespace}/scan'),
+
+            SetRemap(src='/tf', dst=f'{namespace}/tf'),
+            SetRemap(src='/tf_static', dst=f'{namespace}/tf_static'),
+            ]:
+        ld.add_action(action)
+
     # Set environment variables
     ld.add_action(stdout_linebuf_envvar)
 
     # Declare the launch options
-    # ld.add_action(wheeltec_robot)
+    ld.add_action(wheeltec_robot)
     # ld.add_action(lidar_ros)
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_use_sim_time_cmd)
