@@ -39,7 +39,9 @@ def generate_launch_description():
           'frame_id':'camera_link',
           'use_sim_time':use_sim_time,
           'subscribe_scan':True,
-          'subscribe_depth':True}]
+          'subscribe_depth':True,
+          'Grid/Sensor':'2',
+          'Grid/CellSize':'0.01'}]
 
     remappings=[
           ('odom', 'odom_combined'),
@@ -55,6 +57,7 @@ def generate_launch_description():
                 SetRemap(src='/tf_static',dst='tf_static'),
 
                 SetRemap(src='map',dst='/shared/map'),
+                SetRemap(src='cloud_map',dst='/shared/cloud_map'),
 
                 wheeltec_robot,rplidar_ros,depth_img,
                 # Set env var to print messages to stdout immediately
