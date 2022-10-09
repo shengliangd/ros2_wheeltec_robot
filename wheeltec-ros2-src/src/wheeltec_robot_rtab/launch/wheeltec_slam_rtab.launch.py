@@ -49,6 +49,7 @@ def generate_launch_description():
           ('rgb/image', 'camera/color/image_raw'), 
           ('rgb/camera_info', 'camera/color/camera_info'),
           ('depth/image', 'camera/depth/image')]
+
     namespace = f'/robots/{os.environ["ROBOT_NAME"]}'
 
     return LaunchDescription([
@@ -61,8 +62,8 @@ def generate_launch_description():
         SetRemap(src='cloud_map',dst='/shared/cloud_map'),
 
         # wheeltec_robot,
-        rplidar_ros,
-        depth_img,
+        # rplidar_ros,
+        # depth_img,
         # Set env var to print messages to stdout immediately
         SetEnvironmentVariable('RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED', '1'),
 
