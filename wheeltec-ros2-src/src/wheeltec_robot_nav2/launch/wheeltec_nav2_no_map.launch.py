@@ -41,114 +41,91 @@ def generate_launch_description():
     autostart = LaunchConfiguration('autostart')
     open_rviz = LaunchConfiguration('open_rviz')
 
-    stdout_linebuf_envvar = SetEnvironmentVariable(
-        'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
-
-    declare_map_yaml_cmd = DeclareLaunchArgument(
-        'map',
-        default_value=os.path.join(my_map_dir, my_map_file),
-        description='Full path to map yaml file to load')
-
-    declare_use_sim_time_cmd = DeclareLaunchArgument(
-        'use_sim_time',
-        default_value='false',
-        description='Use simulation (Gazebo) clock if true')
-
-    declare_slam_cmd = DeclareLaunchArgument(
-        'use_slam',
-        default_value='false',
-        description='Whether run a SLAM')
-
-    declare_params_file_cmd = DeclareLaunchArgument(
-        'params_file',
-        default_value=os.path.join(my_param_dir, my_param_file),
-        description='Full path to the ROS2 parameters file to use for all launched nodes')
-
-    declare_autostart_cmd = DeclareLaunchArgument(
-        'autostart', 
-        default_value='true',
-        description='Automatically startup the nav2 stack')
-
-    declare_open_rviz_cmd = DeclareLaunchArgument(
-        'open_rviz',
-        default_value='false',
-        description='Launch Rviz?')
-        
     wheeltec_robot = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(wheeltec_launch_dir, 'turn_on_wheeltec_robot.launch.py')),
-    )
+                    PythonLaunchDescriptionSource(os.path.join(wheeltec_launch_dir, 'turn_on_wheeltec_robot.launch.py')),
+            )
     lidar_ros = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(wheeltec_launch_dir, 'wheeltec_lidar.launch.py')),
-    )
+            )
+
+    astra_dir = get_package_share_directory('ros2_astra_camera')
+    depth_img = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(astra_dir,'launch', 'astra_pro_launch.py')),
+        )
+
     namespace = f'/robots/{os.environ["ROBOT_NAME"]}'
-    # Specify the actions
-    bringup_cmd_group = GroupAction([
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'slam_launch.py')),
-            condition=IfCondition(use_slam),
-            launch_arguments={'namespace': namespace,
-                              'use_sim_time': use_sim_time,
-                              'autostart': autostart,
-                              'params_file': params_file}.items()),
+
+    return LaunchDescription([
+        PushRosNamespace(namespace=namespace),
+
+        SetRemap(src=f'{namespace}/map', dst='/shared/map'),
+
+        SetRemap(src='/odom_combined', dst=f'{namespace}/odom_combined'),
+        SetRemap(src='/scan', dst=f'{namespace}/scan'),
+
+        SetRemap(src='/tf', dst=f'{namespace}/tf'),
+        SetRemap(src='/tf_static', dst=f'{namespace}/tf_static'),
+
+        SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1'),
+
+        DeclareLaunchArgument(
+            'map',
+            default_value=os.path.join(my_map_dir, my_map_file),
+            description='Full path to map yaml file to load'),
+
+        DeclareLaunchArgument(
+            'use_sim_time',
+            default_value='false',
+            description='Use simulation (Gazebo) clock if true'),
+
+        DeclareLaunchArgument(
+            'use_slam',
+            default_value='false',
+            description='Whether run a SLAM'),
+
+        DeclareLaunchArgument(
+            'params_file',
+            default_value=os.path.join(my_param_dir, my_param_file),
+            description='Full path to the ROS2 parameters file to use for all launched nodes'),
+
+        DeclareLaunchArgument(
+            'autostart', 
+            default_value='true',
+            description='Automatically startup the nav2 stack'),
+
+        # DeclareLaunchArgument(
+        #     'open_rviz',
+        #     default_value='false',
+        #     description='Launch Rviz?'),
+
+        wheeltec_robot,
+        lidar_ros,
+        depth_img,
 
         # IncludeLaunchDescription(
-        #     # Run Localization only when we don't use SLAM
-        #     PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'localization_launch.py')),
-        #     condition=UnlessCondition(use_slam),
+        #     PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'slam_launch.py')),
+        #     condition=IfCondition(use_slam),
         #     launch_arguments={'namespace': namespace,
-        #                       'map': map_yaml_file,
-        #                       'use_sim_time': use_sim_time,
-        #                       'autostart': autostart,
-        #                       'params_file': params_file,
-        #                       'use_lifecycle_mgr': 'false'}.items()),
+        #                     'use_sim_time': use_sim_time,
+        #                     'autostart': autostart,
+        #                     'params_file': params_file}.items()),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'navigation_launch.py')),
+            # Run Localization only when we don't use SLAM
+            PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'localization_launch.py')),
+            condition=UnlessCondition(use_slam),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,
                               'autostart': autostart,
                               'params_file': params_file,
-                              'use_lifecycle_mgr': 'false',
-                              'map_subscribe_transient_local': 'true'}.items()),
+                              'use_lifecycle_mgr': 'false'}.items()),
 
-        # IncludeLaunchDescription(
-        #     PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'rviz_view_launch.py')),
-        #     launch_arguments={'use_sim_time': use_sim_time,
-        #                       'open_rviz': open_rviz,
-        #                       'map_subscribe_transient_local': 'true'}.items()),
-
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'navigation_launch.py')),
+            launch_arguments={'namespace': namespace,
+                            'use_sim_time': use_sim_time,
+                            'autostart': autostart,
+                            'params_file': params_file,
+                            'use_lifecycle_mgr': 'false',
+                            'map_subscribe_transient_local': 'true'}.items()),
     ])
-
-    # Create the launch description and populate
-    ld = LaunchDescription()
-
-    # FIXME: doesn't work if use relative path as src
-    for action in [
-            PushRosNamespace(namespace=namespace),
-            SetRemap(src=f'{namespace}/map', dst='/shared/map'),
-
-            SetRemap(src='/odom_combined', dst=f'{namespace}/odom_combined'),
-            SetRemap(src='/scan', dst=f'{namespace}/scan'),
-
-            SetRemap(src='/tf', dst=f'{namespace}/tf'),
-            SetRemap(src='/tf_static', dst=f'{namespace}/tf_static'),
-            ]:
-        ld.add_action(action)
-
-    # Set environment variables
-    ld.add_action(stdout_linebuf_envvar)
-
-    # Declare the launch options
-    ld.add_action(wheeltec_robot)
-    # ld.add_action(lidar_ros)
-    ld.add_action(declare_map_yaml_cmd)
-    ld.add_action(declare_use_sim_time_cmd)
-    ld.add_action(declare_slam_cmd)
-    ld.add_action(declare_params_file_cmd)
-    ld.add_action(declare_autostart_cmd)
-    ld.add_action(declare_open_rviz_cmd)
-
-    # Add the actions to launch all of the navigation nodes
-    ld.add_action(bringup_cmd_group)
-
-    return ld
