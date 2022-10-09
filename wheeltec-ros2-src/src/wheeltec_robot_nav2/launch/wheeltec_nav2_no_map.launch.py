@@ -132,7 +132,7 @@ def generate_launch_description():
     ld.add_action(stdout_linebuf_envvar)
 
     # Declare the launch options
-    # ld.add_action(wheeltec_robot)
+    ld.add_action(wheeltec_robot)
     # ld.add_action(lidar_ros)
     ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_use_sim_time_cmd)
