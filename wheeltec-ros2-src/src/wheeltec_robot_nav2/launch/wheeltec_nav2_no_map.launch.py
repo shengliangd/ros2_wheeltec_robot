@@ -84,8 +84,10 @@ def generate_launch_description():
     # Specify the actions
     bringup_cmd_group = GroupAction([
         PushRosNamespace(namespace=namespace),
-        # FIXME: doesn't work if use relative path 'map' as src
-        SetRemap(src='/robots/robot3/map', dst='/shared/map'),
+        # FIXME: doesn't work if use relative path as src
+        SetRemap(src=f'{namespace}/map', dst='/shared/map'),
+        SetRemap(src='/odom_combined', dst=f'{namespace}/odom_combined'),
+        SetRemap(src='/scan', dst=f'{namespace}/scan'),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'slam_launch.py')),
