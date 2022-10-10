@@ -110,16 +110,15 @@ def generate_launch_description():
         #                     'autostart': autostart,
         #                     'params_file': params_file}.items()),
 
-        # IncludeLaunchDescription(
-        #     # Run Localization only when we don't use SLAM
-        #     PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'localization_launch.py')),
-        #     condition=UnlessCondition(use_slam),
-        #     launch_arguments={'namespace': namespace,
-        #                       'map': map_yaml_file,
-        #                       'use_sim_time': use_sim_time,
-        #                       'autostart': autostart,
-        #                       'params_file': params_file,
-        #                       'use_lifecycle_mgr': 'false'}.items()),
+        IncludeLaunchDescription(
+            # Run Localization only when we don't use SLAM
+            PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'localization_launch.py')),
+            condition=UnlessCondition(use_slam),
+            launch_arguments={'namespace': namespace,
+                              'use_sim_time': use_sim_time,
+                              'autostart': autostart,
+                              'params_file': params_file,
+                              'use_lifecycle_mgr': 'false'}.items()),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'navigation_launch.py')),
