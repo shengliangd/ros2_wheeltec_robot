@@ -30,7 +30,7 @@ def generate_launch_description():
     #param_top_akm_dl.yaml、param_four_wheel_diff_dl.yaml、param_four_wheel_diff_bs.yaml
     #If you want to use the DWB algorithm, you can change the input parameters to wheeltec-dwb.yaml
     my_param_dir = os.path.join(my_nav_dir, 'param','wheeltec_param')
-    my_param_file = 'param_mini_mec.yaml'
+    my_param_file = 'param_mini_4wd.yaml'
 
 
     # Create the launch configuration variables
