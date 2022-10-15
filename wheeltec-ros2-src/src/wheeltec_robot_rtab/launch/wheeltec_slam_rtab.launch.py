@@ -40,18 +40,19 @@ def generate_launch_description():
           'use_sim_time':use_sim_time,
           'publish_tf':True,
 
-          'Optimizer/Strategy':'0',
+          'Optimizer/Strategy':'1',
           'Optimizer/Slam2D':'true',
-          # 'Optimizer/Robust':'true',
+          'Optimizer/Robust':'true',
           'wait_for_transform_duration':0.001,
           'wait_for_transform':0.001,
-          'RGBD/NeighborLinkRefining':'true',
+          'RGBD/NeighborLinkRefining':'true',  # This is important to avoid map bluring due to odom noise
           'RGBD/ProximityBySpace':'true',
           'RGBD/ProximityOdomGuess':'true',
           'Reg/Strategy':'2',
           'Reg/Force3DoF':'true',
           'Vis/InlierDistance':'0.2',
-          'Icp/MaxRotation':'1.0',
+          'Icp/MaxRotation':'1.57',
+          'Grid/RayTracing':'true',
 
           'subscribe_scan':True,
           'subscribe_depth':True,
