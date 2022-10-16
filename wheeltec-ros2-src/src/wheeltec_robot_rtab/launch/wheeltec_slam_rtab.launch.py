@@ -52,7 +52,7 @@ def generate_launch_description():
           'Reg/Force3DoF':'true',
           'Vis/InlierDistance':'0.2',
           'Icp/MaxRotation':'1.57',
-          'Grid/RayTracing':'true',
+          'Grid/RayTracing':'false',
 
           'subscribe_scan':True,
           'subscribe_depth':True,
