@@ -47,7 +47,6 @@ def generate_launch_description():
           'wait_for_transform':0.001,
           'RGBD/NeighborLinkRefining':'true',  # This is important to avoid map bluring due to odom noise
           'RGBD/ProximityBySpace':'true',
-          'RGBD/ProximityOdomGuess':'true',
           'Reg/Strategy':'2',
           'Reg/Force3DoF':'true',
           'Vis/InlierDistance':'0.2',
