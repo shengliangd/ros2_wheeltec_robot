@@ -131,8 +131,8 @@ controller_server:
     FollowPath:
       plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
       desired_linear_vel: 0.1
-      max_linear_accel: 0.1
-      max_linear_decel: 0.1
+      max_linear_accel: 0.02
+      max_linear_decel: 0.02
       lookahead_dist: 0.3
       min_lookahead_dist: 0.3
       max_lookahead_dist: 0.9
@@ -152,9 +152,9 @@ controller_server:
       regulated_linear_scaling_min_speed: 0.25
       use_rotate_to_heading: true
       rotate_to_heading_min_angle: 0.78
-      max_angular_accel: 6.28
+      max_angular_accel: 3.14
       goal_dist_tol: 0.08
-      allow_reversing: false
+      allow_reversing: true
       
 controller_server_rclcpp_node:
   ros__parameters:
@@ -307,7 +307,7 @@ recoveries_server:
     transform_timeout: 0.1
     use_sim_time: False
     simulate_ahead_time: 2.0
-    max_rotational_vel: 0.3
+    max_rotational_vel: 0.15
     min_rotational_vel: 0.05
     rotational_acc_lim: 0.3
 

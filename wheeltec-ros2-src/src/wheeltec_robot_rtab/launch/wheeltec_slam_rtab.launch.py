@@ -49,9 +49,13 @@ def generate_launch_description():
           'RGBD/ProximityBySpace':'true',
           'Reg/Strategy':'2',
           'Reg/Force3DoF':'true',
-          'Vis/InlierDistance':'0.2',
+          'Vis/InlierDistance':'0.5',
           'Icp/MaxRotation':'1.57',
           'Grid/RayTracing':'false',
+
+          # avoid keeping dynamic obstacles in the graph
+          'map_filter_radius':0.5,
+          'map_always_update':True,
 
           'subscribe_scan':True,
           'subscribe_depth':True,
