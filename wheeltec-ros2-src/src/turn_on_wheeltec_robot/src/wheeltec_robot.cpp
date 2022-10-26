@@ -101,7 +101,7 @@ void turn_on_robot::Akm_Cmd_Vel_Callback(const ackermann_msgs::msg::AckermannDri
 void turn_on_robot::Cmd_Vel_Callback(const geometry_msgs::msg::Twist::SharedPtr twist_aux)
 {
   short  transition;  //intermediate variable //中间变量
-  if(akm_cmd_vel=="none") {RCLCPP_INFO(this->get_logger(),"not akm");} //Prompt message //提示信息
+  // if(akm_cmd_vel=="none") {RCLCPP_INFO(this->get_logger(),"not akm");} //Prompt message //提示信息
   Send_Data.tx[0]=FRAME_HEADER; //frame head 0x7B //帧头0X7BAkm_Cmd_Vel_Sub
   Send_Data.tx[1] = 0; //set aside //预留位
   Send_Data.tx[2] = 0; //set aside //预留位
