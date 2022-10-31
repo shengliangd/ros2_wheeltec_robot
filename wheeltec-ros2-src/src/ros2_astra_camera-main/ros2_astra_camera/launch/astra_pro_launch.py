@@ -98,10 +98,10 @@ def generate_launch_description():
 
     ld = LaunchDescription()
     ld.add_action(declare_enable_color_cloud_cmd)
-    # ld.add_action(start_depth_image_to_cloud_container_cmd)
+    ld.add_action(start_depth_image_to_cloud_container_cmd)
     ld.add_action(start_astra_camera_node_cmd)
     ld.add_action(start_uvc_camera_node_cmd)
-    # ld.add_action(start_depth_image_to_color_cloud_container_cmd)
+    ld.add_action(start_depth_image_to_color_cloud_container_cmd)
     ld.add_action(start_robot_state_publisher_node_cmd)
 
     return ld
