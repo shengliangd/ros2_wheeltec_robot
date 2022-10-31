@@ -558,7 +558,8 @@ void AstraDriver::depthConnectCb() {
   projector_info_subscribers_ =
       pub_projector_info_->get_subscription_count() > 0;
 
-  bool need_depth = depth_subscribers_ || depth_raw_subscribers_;
+  // bool need_depth = depth_subscribers_ || depth_raw_subscribers_;
+  bool need_depth = true;
 
   if (need_depth && !device_->isDepthStreamStarted()) {
     device_->setDepthFrameCallback(std::bind(
