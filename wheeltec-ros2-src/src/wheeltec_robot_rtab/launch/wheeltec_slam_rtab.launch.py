@@ -45,15 +45,14 @@ def generate_launch_description():
           'Optimizer/Robust':'true',
           'wait_for_transform_duration':0.001,
           'wait_for_transform':0.001,
-          'RGBD/NeighborLinkRefining':'true',  # This is important to avoid map bluring due to odom noise
+          'RGBD/NeighborLinkRefining':'true',  # this is important to avoid map bluring due to odom noise
           'RGBD/ProximityBySpace':'true',
           'Reg/Strategy':'2',
           'Reg/Force3DoF':'true',
           'Vis/InlierDistance':'0.5',
           'Icp/MaxRotation':'1.57',
-          'Grid/RayTracing':'false',
-
-          # avoid keeping dynamic obstacles in the graph
+          # this removes existing obstacle in 2d map, but not working in 3d
+          'Grid/RayTracing':'true',
           'map_filter_radius':0.5,
           'map_always_update':True,
 
