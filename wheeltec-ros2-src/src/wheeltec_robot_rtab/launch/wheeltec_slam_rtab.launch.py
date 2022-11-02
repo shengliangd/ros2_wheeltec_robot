@@ -40,7 +40,10 @@ def generate_launch_description():
           'use_sim_time':use_sim_time,
           'publish_tf':True,
 
-          'Optimizer/Strategy':'1',
+          # check this link for choice of optimizers
+          # https://answers.ros.org/question/343139/rtabmap-g2o-gtsam/
+          'Optimizer/Strategy':'0',  # defaults to 1
+
           'Optimizer/Slam2D':'true',
           'Optimizer/Robust':'true',
           'wait_for_transform_duration':0.001,
