@@ -38,11 +38,13 @@ def generate_launch_description():
             astra_dir, 'launch', 'astra_pro_launch.py')),
         condition=IfCondition(use_astrapro),
     )
+    database_path = LaunchConfiguration('database_path', default='~/.ros/rtabmap.db')
     parameters = {
         'queue_size': 20,
         'frame_id': 'camera_link',
         'use_sim_time': use_sim_time,
         'publish_tf': True,
+        'database_path': database_path,
 
         # check this link for choice of optimizers
         # https://answers.ros.org/question/343139/rtabmap-g2o-gtsam/
@@ -103,6 +105,9 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'localization', default_value='true',
             description='Launch in localization mode.'),
+        DeclareLaunchArgument(
+            'database_path', default_value='~/.ros/rtabmap.db',
+            description='Database path.'),
 
         # Nodes to launch
         Node(
@@ -117,5 +122,6 @@ def generate_launch_description():
             package='rtabmap_ros', executable='rtabmap', output='screen',
             parameters=[parameters,
                         {'Mem/IncrementalMemory': 'False', 'Mem/InitWMWithAllNodes': 'True'}],
-            remappings=remappings),
+            remappings=remappings,
+            arguments=[]),
     ])
