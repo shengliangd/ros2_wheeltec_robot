@@ -51,20 +51,25 @@ def generate_launch_description():
 
         'Optimizer/Slam2D': 'true',
         'Optimizer/Robust': 'true',
-        # 'wait_for_transform_duration': 0.001,
-        # 'wait_for_transform': 0.001,
+        'wait_for_transform_duration': 0.010,
+        'wait_for_transform': 0.010,
         # this is important to avoid map bluring due to odom noise
         'RGBD/NeighborLinkRefining': 'true',
-        # 'RGBD/ProximityBySpace': 'true',
+        'RGBD/ProximityBySpace': 'true',
+
+        # do not add node if moving fast
+        'RGBD/AngularSpeedUpdate': '0.01',
+        'RGBD/LinearSpeedUpdate': '0.30',
+        'odom_sensor_sync': True,
+
         'Reg/Strategy': '2',
         'Reg/Force3DoF': 'true',
         # 'Vis/InlierDistance': '1.0',
         # 'Icp/MaxRotation': '1.57',
         # this removes existing obstacle in 2d map, but not working in 3d
         'Grid/RayTracing': 'true',
-        # 'map_filter_radius': 0.5,
+        'map_filter_radius': 0.2,
         # 'map_always_update': True,
-        'RGBD/OptimizeFromGraphEnd': 'true',
 
         'subscribe_scan': True,
         'subscribe_depth': True,
