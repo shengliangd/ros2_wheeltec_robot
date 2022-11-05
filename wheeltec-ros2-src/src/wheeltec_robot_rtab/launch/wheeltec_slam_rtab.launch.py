@@ -43,7 +43,6 @@ def generate_launch_description():
         'queue_size': 20,
         'frame_id': 'camera_link',
         'use_sim_time': use_sim_time,
-        'publish_tf': True,
         'database_path': database_path,
 
         # check this link for choice of optimizers
@@ -52,19 +51,25 @@ def generate_launch_description():
 
         'Optimizer/Slam2D': 'true',
         'Optimizer/Robust': 'true',
-        'wait_for_transform_duration': 0.001,
-        'wait_for_transform': 0.001,
+        'wait_for_transform_duration': 0.010,
+        'wait_for_transform': 0.010,
         # this is important to avoid map bluring due to odom noise
         'RGBD/NeighborLinkRefining': 'true',
         'RGBD/ProximityBySpace': 'true',
+
+        # do not add node if moving fast
+        'RGBD/AngularSpeedUpdate': '0.01',
+        'RGBD/LinearSpeedUpdate': '0.30',
+        'odom_sensor_sync': True,
+
         'Reg/Strategy': '2',
         'Reg/Force3DoF': 'true',
-        'Vis/InlierDistance': '0.5',
-        'Icp/MaxRotation': '1.57',
+        # 'Vis/InlierDistance': '1.0',
+        # 'Icp/MaxRotation': '1.57',
         # this removes existing obstacle in 2d map, but not working in 3d
         'Grid/RayTracing': 'true',
-        'map_filter_radius': 0.5,
-        'map_always_update': True,
+        'map_filter_radius': 0.2,
+        # 'map_always_update': True,
 
         'subscribe_scan': True,
         'subscribe_depth': True,
@@ -113,7 +118,7 @@ def generate_launch_description():
         Node(
             condition=UnlessCondition(localization),
             package='rtabmap_ros', executable='rtabmap', output='screen',
-            parameters=[parameters],
+            parameters=[parameters, {'publish_tf': True}],
             remappings=remappings,
             arguments=['-d']),
 
@@ -121,7 +126,7 @@ def generate_launch_description():
             condition=IfCondition(localization),
             package='rtabmap_ros', executable='rtabmap', output='screen',
             parameters=[parameters,
-                        {'Mem/IncrementalMemory': 'False', 'Mem/InitWMWithAllNodes': 'True'}],
+                        {'Mem/IncrementalMemory': 'false', 'Mem/InitWMWithAllNodes': 'true', 'publish_tf': False}],
             remappings=remappings,
             arguments=[]),
     ])
