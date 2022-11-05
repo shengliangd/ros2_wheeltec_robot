@@ -151,7 +151,7 @@ controller_server:
       regulated_linear_scaling_min_radius: 0.9
       regulated_linear_scaling_min_speed: 0.25
       use_rotate_to_heading: true
-      rotate_to_heading_min_angle: 0.27
+      rotate_to_heading_min_angle: 0.35
       max_angular_accel: 3.14
       goal_dist_tol: 0.08
       allow_reversing: true
@@ -265,7 +265,7 @@ planner_server:
       tolerance: 0.5                      # tolerance for planning if unable to reach exact pose, in meters, for 2D node
       downsample_costmap: false           # whether or not to downsample the map
       downsampling_factor: 1              # multiplier for the resolution of the costmap layer (e.g. 2 on a 5cm costmap would be 10cm)
-      allow_unknown: false                # allow traveling in unknown space
+      allow_unknown: true # allow traveling in unknown space
       max_iterations: 1000000             # maximum total iterations to search for before failing (in case unreachable), set to -1 to disable
       max_on_approach_iterations: 1000    # maximum number of iterations to attempt to reach goal once in tolerance, 2D only
       max_planning_time: 3.5              # max time in s for planner to plan, smooth, and upsample. Will scale maximum smoothing and upsampling times based on remaining time after planning.
