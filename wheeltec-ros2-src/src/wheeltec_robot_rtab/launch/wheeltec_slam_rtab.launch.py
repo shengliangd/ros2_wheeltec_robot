@@ -71,6 +71,8 @@ def generate_launch_description():
         'map_filter_radius': 0.2,
         # 'map_always_update': True,
 
+        'approx_sync': True,
+
         'subscribe_scan': True,
         'subscribe_depth': True,
         'Grid/Sensor': '2',
@@ -126,7 +128,7 @@ def generate_launch_description():
             condition=IfCondition(localization),
             package='rtabmap_ros', executable='rtabmap', output='screen',
             parameters=[parameters,
-                        {'Mem/IncrementalMemory': 'false', 'Mem/InitWMWithAllNodes': 'true', 'publish_tf': False}],
+                {'Mem/IncrementalMemory': 'false', 'Mem/InitWMWithAllNodes': 'true', 'publish_tf': False, 'subscribe_depth' : False, 'subscribe_rgb' : False, 'subscribe_rgbd' : False}],
             remappings=remappings,
             arguments=[]),
     ])
