@@ -7,4 +7,4 @@ INTERFACE=$1
 # check CYCLONE DDS doc for detail
 CYCLONEDDS_URI="<CycloneDDS><Domain><General><AllowMulticast>spdp</AllowMulticast><NetworkInterfaceAddress>$INTERFACE</NetworkInterfaceAddress></General></Domain></CycloneDDS>"
 
-docker create -t --name ros2_wheeltec_robot -e CYCLONEDDS_URI=$CYCLONEDDS_URI --network host --ipc host --privileged --shm-size 8G -v /dev:/dev ros2_wheeltec_robot bash
+docker create -t --name ros2_wheeltec_robot -e CYCLONEDDS_URI=$CYCLONEDDS_URI --network host --ipc host --privileged --shm-size 8G -v /dev:/dev ros2-wheeltec-robot bash
