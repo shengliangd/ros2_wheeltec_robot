@@ -100,7 +100,7 @@ def generate_launch_description():
 
         wheeltec_robot,
         lidar_ros,
-        depth_img,
+        # depth_img,
 
         # IncludeLaunchDescription(
         #     PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'slam_launch.py')),

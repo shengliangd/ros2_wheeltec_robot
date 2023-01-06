@@ -7,6 +7,6 @@
 2. 如果需要的话，替换 camera_info 中的文件；
 3. 执行 `docker build . -t ros2_wheeltec_robot -f docker/Dockerfile`。
 
-运行容器时可以参考 `bash docker/run.sh`。
+运行容器时可以使用 `bash docker/create.sh`。
 
 对应 ros2 galactic 版本，2022 年 8 月 29 日有效；后续如果相关软件包有更新可能会构建失败。

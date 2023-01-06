@@ -23,7 +23,7 @@ RUN bash -c 'source /ros_entrypoint.sh && rosdep install --from-paths src -r -y 
 # COPY LSM10/2-CMakeLists.txt src/wheeltec_lidar_ros2/LSlidar/lsm10_v2/CMakeLists.txt
 # RUN bash -c 'source /ros_entrypoint.sh && colcon build --symlink-install --packages-select lsm10_v2'
 
-ENV SKIP_PACKAGES="nav2_system_tests lsm10_v2"
+ENV SKIP_PACKAGES="lsm10_v2"
 # build!
 RUN bash -c 'source /ros_entrypoint.sh && colcon build --executor sequential --symlink-install --packages-skip $SKIP_PACKAGES' || true
 RUN bash -c 'source /ros_entrypoint.sh && colcon build --executor sequential --symlink-install --packages-select wheeltec_rrt_msg --packages-skip $SKIP_PACKAGES' || true
@@ -36,6 +36,8 @@ ENV SKIP_PACKAGES=
 RUN apt-get install -y ros-$ROS_DISTRO-depth-image-proc
 
 ENV LD_LIBRARY_PATH="/work/ros2_ws/src/ros2_astra_camera-main/ros2_astra_camera/lib/openni2_redist/arm64:${LD_LIBRARY_PATH}"
+
+RUN apt-get install -y ros-$ROS_DISTRO-navigation2
 
 COPY camera_info /root/.ros/camera_info
 
