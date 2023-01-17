@@ -9,8 +9,8 @@ WORKDIR /work/ros2_ws
 RUN apt-get install -y ros-$ROS_DISTRO-filters
 RUN apt-get install -y libuvc-dev
 RUN apt-get install -y ros-$ROS_DISTRO-joint-state-publisher ros-$ROS_DISTRO-robot-localization ros-$ROS_DISTRO-rtabmap-ros
+RUN apt-get install -y ros-$ROS_DISTRO-navigation2 ros-$ROS_DISTRO-depth-image-proc
 
-# copy source code
 COPY wheeltec-ros2-src/src src
 
 # install dependencies
@@ -28,16 +28,12 @@ ENV SKIP_PACKAGES="lsm10_v2"
 RUN bash -c 'source /ros_entrypoint.sh && colcon build --executor sequential --symlink-install --packages-skip $SKIP_PACKAGES' || true
 RUN bash -c 'source /ros_entrypoint.sh && colcon build --executor sequential --symlink-install --packages-select wheeltec_rrt_msg --packages-skip $SKIP_PACKAGES' || true
 ENV MAKEFLAGS="-j2"
-RUN bash -c 'source /ros_entrypoint.sh && source install/setup.bash && colcon build --executor sequential --symlink-install --packages-select wheeltec_robot_rrt --packages-skip SKIP_PACKAGES' || true
+RUN bash -c 'source /ros_entrypoint.sh && source install/setup.bash && colcon build --executor sequential --symlink-install --packages-select wheeltec_robot_rrt --packages-skip $SKIP_PACKAGES' || true
 RUN bash -c 'source /ros_entrypoint.sh && source install/setup.bash && colcon build --executor sequential --symlink-install --packages-skip $SKIP_PACKAGES'
 ENV MAKEFLAGS=
 ENV SKIP_PACKAGES=
 
-RUN apt-get install -y ros-$ROS_DISTRO-depth-image-proc
-
 ENV LD_LIBRARY_PATH="/work/ros2_ws/src/ros2_astra_camera-main/ros2_astra_camera/lib/openni2_redist/arm64:${LD_LIBRARY_PATH}"
-
-RUN apt-get install -y ros-$ROS_DISTRO-navigation2
 
 COPY camera_info /root/.ros/camera_info
 

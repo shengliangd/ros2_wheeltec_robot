@@ -34,12 +34,10 @@ def generate_launch_description():
 
 
     # Create the launch configuration variables
-    map_yaml_file = LaunchConfiguration('map')
     use_sim_time = LaunchConfiguration('use_sim_time')
-    use_slam = LaunchConfiguration('use_slam', default='false')
+    mapping = LaunchConfiguration('mapping', default='false')
     params_file = LaunchConfiguration('params_file')
     autostart = LaunchConfiguration('autostart')
-    open_rviz = LaunchConfiguration('open_rviz')
 
     wheeltec_robot = IncludeLaunchDescription(
                     PythonLaunchDescriptionSource(os.path.join(wheeltec_launch_dir, 'turn_on_wheeltec_robot.launch.py')),
@@ -49,8 +47,9 @@ def generate_launch_description():
             )
 
     astra_dir = get_package_share_directory('ros2_astra_camera')
-    depth_img = IncludeLaunchDescription(
+    camera = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(astra_dir,'launch', 'astra_pro_launch.py')),
+            condition=IfCondition(mapping),
         )
 
     namespace = f'/robots/{os.environ["ROBOT_NAME"]}'
@@ -79,9 +78,9 @@ def generate_launch_description():
             description='Use simulation (Gazebo) clock if true'),
 
         DeclareLaunchArgument(
-            'use_slam',
+            'mapping',
             default_value='false',
-            description='Whether run a SLAM'),
+            description='Building a map?'),
 
         DeclareLaunchArgument(
             'params_file',
@@ -93,27 +92,14 @@ def generate_launch_description():
             default_value='true',
             description='Automatically startup the nav2 stack'),
 
-        # DeclareLaunchArgument(
-        #     'open_rviz',
-        #     default_value='false',
-        #     description='Launch Rviz?'),
-
         wheeltec_robot,
         lidar_ros,
-        # depth_img,
-
-        # IncludeLaunchDescription(
-        #     PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'slam_launch.py')),
-        #     condition=IfCondition(use_slam),
-        #     launch_arguments={'namespace': namespace,
-        #                     'use_sim_time': use_sim_time,
-        #                     'autostart': autostart,
-        #                     'params_file': params_file}.items()),
+        camera,
 
         IncludeLaunchDescription(
             # Run Localization only when we don't use SLAM
             PythonLaunchDescriptionSource(os.path.join(my_launch_dir, 'localization_launch.py')),
-            condition=UnlessCondition(use_slam),
+            condition=UnlessCondition(mapping),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,
                               'autostart': autostart,

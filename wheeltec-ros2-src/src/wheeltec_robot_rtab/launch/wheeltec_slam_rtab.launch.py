@@ -14,30 +14,7 @@ from launch.conditions import IfCondition, UnlessCondition
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
-    use_astrapro = LaunchConfiguration('use_astrapro', default='false')
 
-    astra_dir = get_package_share_directory('ros2_astra_camera')
-    wheeltec_slam_dir = get_package_share_directory('wheeltec_slam_toolbox')
-    bringup_dir = get_package_share_directory('turn_on_wheeltec_robot')
-
-    wheeltec_robot = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(
-            bringup_dir, 'launch', 'turn_on_wheeltec_robot.launch.py')),
-    )
-    wheeltec_slam = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(wheeltec_slam_dir, 'launch', 'online_sync.launch.py')
-        ),
-    )
-    rplidar_ros = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(
-            bringup_dir, 'launch', 'wheeltec_lidar.launch.py')),
-    )
-    depth_img = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(
-            astra_dir, 'launch', 'astra_pro_launch.py')),
-        condition=IfCondition(use_astrapro),
-    )
     database_path = LaunchConfiguration('database_path', default='~/.ros/rtabmap.db')
     parameters = {
         'queue_size': 20,
@@ -98,14 +75,10 @@ def generate_launch_description():
         SetRemap(src='map', dst='/shared/map'),
         SetRemap(src='cloud_map', dst='/shared/cloud_map'),
 
-        # wheeltec_robot,
-        # rplidar_ros,
-        # depth_img,
         # Set env var to print messages to stdout immediately
         SetEnvironmentVariable('RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED', '1'),
 
         # Launch arguments
-        DeclareLaunchArgument('use_astrapro', default_value='false'),
         DeclareLaunchArgument(
             'use_sim_time', default_value='false',
             description='Use simulation (Gazebo) clock if true'),
